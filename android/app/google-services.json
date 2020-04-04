@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "962991924354",
+    "firebase_url": "https://quintc-9f842.firebaseio.com",
+    "project_id": "quintc-9f842",
+    "storage_bucket": "quintc-9f842.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:962991924354:android:5e4336882ae48a8e8b809b",
+        "android_client_info": {
+          "package_name": "com.quintc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "962991924354-17lr7vk5908cn03pl9m1ra9sc9qnu1h2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwQT5K29XOjWt_nNxAtSx0sBDAyK1KJd0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "962991924354-17lr7vk5908cn03pl9m1ra9sc9qnu1h2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
