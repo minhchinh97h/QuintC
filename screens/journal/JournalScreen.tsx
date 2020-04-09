@@ -4,7 +4,7 @@ import { Text } from "react-native"
 const JournalScreen = () => {
     return(
         <Text>
-            Testing
+            Testing Testing
         </Text>
     )
 }
