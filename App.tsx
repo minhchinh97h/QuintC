@@ -1,15 +1,13 @@
 import React from 'react';
 import RootNavigation from './routes';
-import i18next from "i18next"
+import { useSelector } from "react-redux";
+import { getLanguage } from 'selectors/SettingsSelector';
+import i18next from 'i18next';
+const App = () => {
+    const language = useSelector(getLanguage)
+    i18next.changeLanguage(language)
 
-i18next.init({
-    lng: "en",
-    ns: ["./translations/en"],
-    defaultNS: "./translations/en"
-}, (err, t) => {
-    if (err) return console.log("something went wrong loading", err)
-})
-
-const App = () => <RootNavigation />
+    return (<RootNavigation />)
+}
 
 export default App;

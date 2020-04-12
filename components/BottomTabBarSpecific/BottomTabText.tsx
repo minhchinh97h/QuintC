@@ -2,6 +2,8 @@ import React, { memo } from "react"
 import { Text, StyleSheet } from "react-native"
 import { translate } from "helpers/translate"
 import { lightFont, textIconColors } from "styles"
+import { useTranslation } from "react-i18next"
+import TranslateText from "primitives/TranslateText"
 
 interface Props {
     text: string,
@@ -10,7 +12,7 @@ interface Props {
 
 const BottomTabText = (props: Props) => {
     return (
-        <Text style={{ ...style.text, color: props.color }}>{translate(props.text)}</Text>
+        <TranslateText text={props.text} style={{ ...style.text, color: props.color }} />
     )
 }
 

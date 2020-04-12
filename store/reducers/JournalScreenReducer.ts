@@ -7,7 +7,7 @@ const types = {
 
 const initialState: JournalScreenState = {}
 
-const reducer = (state = initialState, action: ReduxAction) => {
+const JournalScreenReducer = (state = initialState, action: ReduxAction) => {
     const {type, payload} = action
 
     switch(type) {
@@ -16,4 +16,4 @@ const reducer = (state = initialState, action: ReduxAction) => {
     }
 }
 
-export default reducer
+export default JournalScreenReducer

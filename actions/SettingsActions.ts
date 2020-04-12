@@ -1,0 +1,1 @@
+import {batchActions} from 'redux-batched-actions';
