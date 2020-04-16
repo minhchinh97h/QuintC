@@ -12,6 +12,8 @@ import {
     faQuestion,
     faChevronLeft,
     faChevronRight,
+    faBars,
+    faEllipsisV,
 } from "@fortawesome/free-solid-svg-icons";
 
 export const BOTTOM_TAB_ICON_SIZE = 19
@@ -78,6 +80,13 @@ export const RightChevronIcon = (props: Props) => (
     <FontAwesomeIcon icon={faChevronRight} size={props.size} color={props.color} />
 );
 
+export const HamburgerIcon = (props: Props) => (
+    <FontAwesomeIcon icon={faBars} size={props.size} color={props.color} />
+);
+export const EllipsisIcon = (props: Props) => (
+    <FontAwesomeIcon icon={faEllipsisV} size={props.size} color={props.color} />
+);
+
 export const PaperPlaneIcon = (props: Props) => (
     <Entypo name="paper-plane" size={props.size} color={props.color} />
 );
@@ -85,3 +94,4 @@ export const PaperPlaneIcon = (props: Props) => (
 export const HomeIcon = (props: Props) => (
     <AntDesign name="home" size={props.size} color={props.color} />
 );
+

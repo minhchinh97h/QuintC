@@ -40,5 +40,5 @@ export const oauthColors = {
   oauth_2: '#BD5240',
 };
 
-export const colorWhite = '#FFFFFF';
+export const lightBackgroundColor = '#F2F2F2';
 export const colorBlack = '#000000';

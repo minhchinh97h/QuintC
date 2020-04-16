@@ -2,5 +2,8 @@
   "JOURNAL_TAB_TITLE": "Journal",
   "PROGRESS_TAB_TITLE": "Progress",
   "REWARD_TAB_TITLE": "Reward",
-  "SETTINGS_TAB_TITLE": "Settings"
+  "SETTINGS_TAB_TITLE": "Settings",
+  "DAY_TASK_TYPE_BAR": "Day",
+  "WEEK_TASK_TYPE_BAR": "Week",
+  "MONTH_TASK_TYPE_BAR": "Month"
 }

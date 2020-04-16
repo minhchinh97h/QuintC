@@ -1,13 +1,10 @@
 import React, { memo, useState, ReactNode } from "react"
 import { View, StyleSheet } from "react-native"
-import { colorWhite, colorBlack, primaryColors, textIconColors } from "styles"
+import { lightBackgroundColor, colorBlack, primaryColors, textIconColors } from "styles"
 import { JournalIcon, ProgressIcon, RewardIcon, SettingsIcon } from "icons"
 import BottomTabText from "./BottomTabBarSpecific/BottomTabText"
 import { TouchableOpacity } from "react-native-gesture-handler"
-import i18next from "i18next"
-import { useDispatch } from "react-redux";
-import { actionCreators } from "store/reducers/SettingsReducer"
-import { Languages } from "types/states/SettingsState"
+import { useNavigation } from "@react-navigation/native"
 
 const BottomTabBar = () => {
     const [index, setIndex] = useState(0)
@@ -67,19 +64,18 @@ interface ButtonContainerProps {
 }
 
 const ButtonContainer = (props: ButtonContainerProps) => {
-    const dispatch = useDispatch()
+    const navigation = useNavigation()
 
     const onPress = () => {
         props.chooseTab(props.tabIndex)
-        console.log("pressed!")
-
         if (props.tabIndex === 0) {
-            i18next.changeLanguage(Languages.vn)
-            dispatch(actionCreators.changeLanguage(Languages.vn))
-        }
-        else if (props.tabIndex === 1) {
-            i18next.changeLanguage(Languages.en)
-            dispatch(actionCreators.changeLanguage(Languages.en))
+            navigation.navigate("JournalStack")
+        } else if (props.tabIndex === 1) {
+            navigation.navigate("ProgressScreen")
+        } else if (props.tabIndex === 2) {
+            navigation.navigate("RewardScreen")
+        } else {
+            navigation.navigate("SettingsScreenr")
         }
     }
 
@@ -94,7 +90,7 @@ const style = StyleSheet.create({
     container: {
         flexDirection: "row",
         height: 64,
-        backgroundColor: colorWhite,
+        backgroundColor: lightBackgroundColor,
         shadowColor: colorBlack,
         shadowOpacity: 0.04,
         shadowOffset: {

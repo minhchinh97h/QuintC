@@ -1,14 +1,13 @@
-import React, { memo, ReactChildren } from "react"
-import { useTranslation } from "react-i18next"
+import React, { memo, ReactNode } from "react"
 import { Text, StyleProp, TextStyle } from "react-native"
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getLanguage } from "selectors/SettingsSelector";
 import { translate } from "helpers/translate";
 
 interface Props {
     text: string,
     style?: StyleProp<TextStyle>,
-    children?: ReactChildren
+    children?: ReactNode
 }
 
 const TranslateText = (props: Props) => {
@@ -21,4 +20,4 @@ const TranslateText = (props: Props) => {
     )
 }
 
-export default TranslateText
+export default memo(TranslateText)
