@@ -2,7 +2,7 @@ import React, { memo, ReactNode } from "react"
 import { Text, StyleProp, TextStyle } from "react-native"
 import { useSelector } from "react-redux";
 import { getLanguage } from "selectors/SettingsSelector";
-import { translate } from "helpers/translate";
+import { translate } from "helpers/Translate";
 
 interface Props {
     text: string,

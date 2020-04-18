@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { Text, StyleSheet } from "react-native"
-import { translate } from "helpers/translate"
+import { translate } from "helpers/Translate"
 import { lightFont, textIconColors } from "styles"
 import { useTranslation } from "react-i18next"
 import TranslateText from "primitives/TranslateText"

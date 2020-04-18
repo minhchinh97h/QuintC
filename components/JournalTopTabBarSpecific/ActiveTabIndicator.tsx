@@ -1,30 +1,40 @@
 import React, { memo, useState, useEffect } from "react"
-import { View, StyleSheet, Dimensions } from "react-native";
-import Animated from "react-native-reanimated";
-import { primaryColors, textIconColors } from "styles";
+import {
+    View,
+    StyleSheet,
+    Dimensions,
+} from "react-native";
+import Animated, { Clock, Easing } from "react-native-reanimated";
+import { primaryColors } from "styles";
+import { runTiming } from "helpers/Reanimated";
 
 const windowWidth = Dimensions.get("window").width
+const duration = 150
+const easing = Easing.inOut(Easing.ease)
 
 interface Props {
     activeIndex: number,
-    lastActiveIndex: number
 }
 
 const ActiveTabIndicator = (props: Props) => {
-    const { activeIndex, lastActiveIndex } = props
-    const [translateX, setTranslateX] = useState(0)
+    const { activeIndex } = props
+    const [lastActiveIndex, setLastActivateIndex] = useState(activeIndex)
+    const clock = new Clock()
+    const calculatePosition = () => windowWidth * lastActiveIndex * 1 / 3
+    const calculateDest = () => windowWidth * activeIndex * 1 / 3
 
     useEffect(() => {
         if (activeIndex !== lastActiveIndex) {
-            setTranslateX(windowWidth * ((activeIndex) / 3))
+            setLastActivateIndex(activeIndex)
         }
+    }, [activeIndex, lastActiveIndex])
 
-    }, [activeIndex])
+    const translateX = runTiming(clock, calculatePosition(), calculateDest(), duration, easing)
 
     return (
-        <View style={{ ...styles.container, ...{ transform: [{ translateX }] } }}>
+        <Animated.View style={[styles.container, { transform: [{ translateX }], width: windowWidth / 3 }]}>
             <View style={styles.indicator} />
-        </View>
+        </Animated.View>
     )
 }
 
@@ -35,7 +45,6 @@ const styles = StyleSheet.create({
         position: "absolute",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: textIconColors.ti_3
     },
     indicator: {
         width: 52,

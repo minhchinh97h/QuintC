@@ -1,12 +1,12 @@
 import React, { memo, ReactNode } from "react"
-import { StyleProp, TextStyle, StyleSheet } from "react-native"
-import { translate } from "helpers/translate";
+import { StyleProp, TextStyle, StyleSheet, ViewStyle } from "react-native"
+import { translate } from "helpers/Translate";
 import TranslateText from "./TranslateText";
 import { mediumFont } from "styles";
 
 interface Props {
     text: string,
-    style?: StyleProp<TextStyle>,
+    style?: StyleProp<ViewStyle>,
     children?: ReactNode
 }
 
@@ -14,7 +14,7 @@ const HeaderTitle = (props: Props) => {
     return (
         <TranslateText text={props.text} style={{ ...styles.headerText, ...props.style }}>
             {translate(props.text)}
-        </TranslateText>
+        </TranslateText >
     )
 }
 
