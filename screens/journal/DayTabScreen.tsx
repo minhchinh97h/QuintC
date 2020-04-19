@@ -1,12 +1,17 @@
-import React, { memo } from "react"
-import { Text } from "react-native"
+import React, {memo} from "react";
+import {View, StyleSheet} from "react-native";
+import DayHorizontalCalendar from "components/JournalScreenSpecific/DayHorizontalCalendar";
 
 const DayTabScreen = () => {
-    return (
-        <Text>
-            Day Tab Screen
-        </Text>
-    )
-}
+  return (
+    <View style={styles.container}>
+      <DayHorizontalCalendar />
+    </View>
+  );
+};
 
-export default memo(DayTabScreen)
+export default memo(DayTabScreen);
+
+const styles = StyleSheet.create({
+  container: {},
+});

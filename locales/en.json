@@ -5,5 +5,12 @@
   "SETTINGS_TAB_TITLE": "Settings",
   "DAY_TASK_TYPE_BAR": "Day",
   "WEEK_TASK_TYPE_BAR": "Week",
-  "MONTH_TASK_TYPE_BAR": "Month"
+  "MONTH_TASK_TYPE_BAR": "Month",
+  "JOURNAL_HORIZONTAL_DAY_CALENDAR": {
+    "S": "S",
+    "M": "M",
+    "T": "T",
+    "W": "W",
+    "F": "F"
+  }
 }
