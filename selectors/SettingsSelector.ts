@@ -1,5 +1,5 @@
 import {createSelector} from 'reselect';
-import {States} from 'types/states/States';
+import {States} from 'types/states/State';
 import {SettingsState} from 'types/states/SettingsState';
 
 const getState = (state: States) => state.settings;

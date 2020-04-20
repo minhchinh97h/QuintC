@@ -1,12 +1,12 @@
-import AsyncStorage from '@react-native-community/async-storage';
-import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
-import thunk from 'redux-thunk';
-import {persistStore, persistReducer, Transform} from 'redux-persist';
-import {batchDispatchMiddleware} from 'redux-batched-actions';
-import JournalScreenReducer from '../store/reducers/JournalScreenReducer';
-import SettingsReducer from '../store/reducers/SettingsReducer';
-import ImmerTransform from 'helpers/ImmerTransform';
-import {States} from 'types/states/States';
+import AsyncStorage from "@react-native-community/async-storage";
+import {createStore, combineReducers, compose, applyMiddleware} from "redux";
+import thunk from "redux-thunk";
+import {persistStore, persistReducer, Transform} from "redux-persist";
+import {batchDispatchMiddleware} from "redux-batched-actions";
+import JournalScreenReducer from "../store/reducers/JournalScreenReducer";
+import SettingsReducer from "../store/reducers/SettingsReducer";
+import ImmerTransform from "helpers/ImmerTransform";
+import {State} from "types/states/State";
 
 const makePersisted = (
   key: string,
@@ -24,9 +24,9 @@ const makePersisted = (
     reducer,
   );
 
-const rootReducer = combineReducers<States>({
-  journalScreen: makePersisted('journalScreen', JournalScreenReducer),
-  settings: makePersisted('settings', SettingsReducer),
+const rootReducer = combineReducers<State>({
+  journalScreen: makePersisted("journalScreen", JournalScreenReducer),
+  settings: makePersisted("settings", SettingsReducer),
 });
 
 const middleware = applyMiddleware(thunk, batchDispatchMiddleware);

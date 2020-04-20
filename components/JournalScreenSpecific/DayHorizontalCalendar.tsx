@@ -5,23 +5,29 @@ import React, {
   useRef,
   MutableRefObject,
 } from "react";
-import {FlatList, LayoutChangeEvent} from "react-native";
+import {FlatList, NativeSyntheticEvent, NativeScrollEvent} from "react-native";
 import moment from "moment";
-import {returnDaysInYears} from "helpers/CalendarCalculations";
+import {
+  returnDaysInYears,
+  returnAccordingDayHeaderText,
+} from "helpers/CalendarCalculations";
 import {
   DayCalendarChildContainer,
   DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH,
   DayHorizontalCalendarSeparator,
   DayHorizontalCalendarArrayProps,
 } from "./DayCalendarChildComponents";
+import {useDispatch, useSelector} from "react-redux";
+import {actionCreators} from "store/reducers/JournalScreenReducer";
+import {getPressHeaderTitleTracker} from "selectors/JournalScreenSelector";
 
 const DayHorizontalCalendar = () => {
+  const dispatch = useDispatch();
   const yearsBetweenPast = 1;
-  const yearsBetweenFuture = 0;
+  const yearsBetweenFuture = 3;
   const currentYear = moment().year();
   const [activeIndex, setActiveIndex] = useState(0);
   const [lastActiveIndex, setLastActiveIndex] = useState(0);
-  const [extraData, setExtraData] = useState(0);
   let ref: MutableRefObject<
     FlatList<DayHorizontalCalendarArrayProps> | undefined
   > = useRef();
@@ -37,14 +43,23 @@ const DayHorizontalCalendar = () => {
     updateInititalScrollIndex(getCurrentDateIndex(days));
   }, []);
 
+  const pressHeaderTitleTracker = useSelector(getPressHeaderTitleTracker);
+  useEffect(() => {
+    chooseDate(initialScrollIndex);
+  }, [pressHeaderTitleTracker]);
+
   const updateInititalScrollIndex = (index: number) => {
     setInitialScrollIndex(index);
     chooseDate(index);
     scrollToOffset(index);
   };
 
-  const keyExtractor = (item: DayHorizontalCalendarArrayProps, index: number) =>
-    `journal-horizontal-day-calendar-iso-${item}-index-${index}`;
+  const keyExtractor = (
+    item: DayHorizontalCalendarArrayProps,
+    index: number,
+  ) => {
+    return `journal-horizontal-day-calendar-iso-${item}-index-${index}`;
+  };
 
   const renderItem = ({
     item,
@@ -81,16 +96,28 @@ const DayHorizontalCalendar = () => {
   const scrollToOffset = (index: number) => {
     if (ref && ref.current) {
       ref.current.scrollToOffset({
-        offset: index * DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH,
+        offset: (index - 1) * DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH, // For clearer view
       });
-      setExtraData(extraData + 1);
+    }
+  };
+
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const {x} = e.nativeEvent.contentOffset;
+    let index = Math.floor(x / DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH);
+    index += 1; // For clearer view
+    if (index < 0) index = 0;
+    if (data.length > 0) {
+      dispatch(
+        actionCreators.updateCalendarHeaderTitle(
+          returnAccordingDayHeaderText(data, index),
+        ),
+      );
     }
   };
 
   return (
     <FlatList
       data={data}
-      extraData={extraData}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       horizontal={true}
@@ -101,7 +128,10 @@ const DayHorizontalCalendar = () => {
       maxToRenderPerBatch={9}
       initialNumToRender={9}
       ItemSeparatorComponent={DayHorizontalCalendarSeparator}
-      showsHorizontalScrollIndicator={false}></FlatList>
+      showsHorizontalScrollIndicator={false}
+      removeClippedSubviews={true}
+      scrollEventThrottle={12}
+      onScroll={onScroll}></FlatList>
   );
 };
 
@@ -109,7 +139,6 @@ export default memo(DayHorizontalCalendar);
 
 const getCurrentDateIndex = (days: DayHorizontalCalendarArrayProps[]) => {
   return days.findIndex((day) => {
-    // console.log(day.dateString, moment().startOf("day").toISOString())
     return day.dateString === moment().startOf("day").toISOString();
   });
 };

@@ -1,5 +1,6 @@
 import moment from "moment";
 import {DayHorizontalCalendarArrayProps} from "../components/JournalScreenSpecific/DayCalendarChildComponents";
+import {translate} from "./Translate";
 
 const dayInWeekTexts = [
   "JOURNAL_HORIZONTAL_DAY_CALENDAR.S",
@@ -10,6 +11,8 @@ const dayInWeekTexts = [
   "JOURNAL_HORIZONTAL_DAY_CALENDAR.F",
   "JOURNAL_HORIZONTAL_DAY_CALENDAR.S",
 ];
+
+const monthFullNames = (index: number) => `MONTH_FULL_NAMES.${index}`;
 
 export const returnDaysInYears = (
   leftEndYear: number,
@@ -45,4 +48,15 @@ export const returnDaysInYears = (
   }
 
   return days;
+};
+
+export const returnAccordingDayHeaderText = (
+  days: DayHorizontalCalendarArrayProps[],
+  index: number,
+) => {
+  const dayData = days[index];
+  const dateMoment = moment(dayData.dateString);
+  return `${translate(monthFullNames(dateMoment.month()))} ${moment(
+    dateMoment.year(),
+  )}`;
 };
