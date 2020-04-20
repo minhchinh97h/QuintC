@@ -3,7 +3,7 @@ import {View, StyleSheet, TouchableOpacity} from "react-native";
 import TranslateText from "primitives/TranslateText";
 import {primaryColors, lightFont, textIconColors} from "styles";
 
-export interface DayCalendarChildContainerProps {
+interface DayCalendarChildContainerProps {
   dateString: string;
   title: string;
   description: string;
@@ -11,6 +11,12 @@ export interface DayCalendarChildContainerProps {
   chooseDate: Function;
   activeIndex: number;
   lastActiveIndex: number;
+}
+
+export interface DayHorizontalCalendarArrayProps {
+  dateString: string;
+  title: string;
+  description: string;
 }
 
 export const DayCalendarChildContainer = memo(
@@ -28,15 +34,40 @@ export const DayCalendarChildContainer = memo(
   },
 );
 
-export const DayCalendarChildTitle = memo(
-  (props: DayCalendarChildContainerProps) => {
+export class DayCalendarChildTitle extends React.PureComponent<
+  DayCalendarChildContainerProps
+> {
+  state = {
+    title: styles.title,
+  };
+
+  shouldComponentUpdate(nextProps: DayCalendarChildContainerProps) {
+    return (
+      nextProps.activeIndex === this.props.index ||
+      nextProps.lastActiveIndex === this.props.index
+    );
+  }
+
+  static getDerivedStateFromProps(nextProps: DayCalendarChildContainerProps) {
+    if (nextProps.activeIndex === nextProps.index) {
+      return {
+        title: {...styles.title, ...{color: primaryColors.prim_1}},
+      };
+    } else if (nextProps.lastActiveIndex === nextProps.index) {
+      return {
+        title: {...styles.title, ...{color: textIconColors.ti_2}},
+      };
+    }
+  }
+
+  render() {
     return (
       <View style={styles.titleContainer}>
-        <TranslateText text={props.title} style={styles.title} />
+        <TranslateText text={this.props.title} style={this.state.title} />
       </View>
     );
-  },
-);
+  }
+}
 
 export class DayCalendarChildDescription extends React.PureComponent<
   DayCalendarChildContainerProps

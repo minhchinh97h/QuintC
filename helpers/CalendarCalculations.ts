@@ -1,5 +1,5 @@
 import moment from "moment";
-import {DayCalendarChildContainerProps} from "../components/JournalScreenSpecific/DayCalendarChildComponents";
+import {DayHorizontalCalendarArrayProps} from "../components/JournalScreenSpecific/DayCalendarChildComponents";
 
 const dayInWeekTexts = [
   "JOURNAL_HORIZONTAL_DAY_CALENDAR.S",
@@ -15,7 +15,7 @@ export const returnDaysInYears = (
   leftEndYear: number,
   rightEndYear: number,
 ) => {
-  let days: DayCalendarChildContainerProps[] = [];
+  let days: DayHorizontalCalendarArrayProps[] = [];
 
   for (let i = leftEndYear; i <= rightEndYear; i++) {
     const startDayOfYear = moment()

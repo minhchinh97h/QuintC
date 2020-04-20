@@ -9,10 +9,10 @@ import {FlatList, LayoutChangeEvent} from "react-native";
 import moment from "moment";
 import {returnDaysInYears} from "helpers/CalendarCalculations";
 import {
-  DayCalendarChildContainerProps,
   DayCalendarChildContainer,
   DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH,
   DayHorizontalCalendarSeparator,
+  DayHorizontalCalendarArrayProps,
 } from "./DayCalendarChildComponents";
 
 const DayHorizontalCalendar = () => {
@@ -23,10 +23,10 @@ const DayHorizontalCalendar = () => {
   const [lastActiveIndex, setLastActiveIndex] = useState(0);
   const [extraData, setExtraData] = useState(0);
   let ref: MutableRefObject<
-    FlatList<DayCalendarChildContainerProps> | undefined
+    FlatList<DayHorizontalCalendarArrayProps> | undefined
   > = useRef();
   const [initialScrollIndex, setInitialScrollIndex] = useState(0);
-  const [data, setData] = useState<DayCalendarChildContainerProps[]>([]);
+  const [data, setData] = useState<DayHorizontalCalendarArrayProps[]>([]);
 
   useEffect(() => {
     const days = returnDaysInYears(
@@ -43,14 +43,14 @@ const DayHorizontalCalendar = () => {
     scrollToOffset(index);
   };
 
-  const keyExtractor = (item: DayCalendarChildContainerProps, index: number) =>
+  const keyExtractor = (item: DayHorizontalCalendarArrayProps, index: number) =>
     `journal-horizontal-day-calendar-iso-${item}-index-${index}`;
 
   const renderItem = ({
     item,
     index,
   }: {
-    item: DayCalendarChildContainerProps;
+    item: DayHorizontalCalendarArrayProps;
     index: number;
   }) => (
     <DayCalendarChildContainer
@@ -70,7 +70,7 @@ const DayHorizontalCalendar = () => {
   };
 
   const getItemLayout = (
-    data: DayCalendarChildContainerProps[] | null | undefined,
+    data: DayHorizontalCalendarArrayProps[] | null | undefined,
     index: number,
   ) => ({
     length: DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH,
@@ -107,7 +107,7 @@ const DayHorizontalCalendar = () => {
 
 export default memo(DayHorizontalCalendar);
 
-const getCurrentDateIndex = (days: DayCalendarChildContainerProps[]) => {
+const getCurrentDateIndex = (days: DayHorizontalCalendarArrayProps[]) => {
   return days.findIndex((day) => {
     // console.log(day.dateString, moment().startOf("day").toISOString())
     return day.dateString === moment().startOf("day").toISOString();
