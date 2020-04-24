@@ -2,18 +2,18 @@ import React from "react";
 import {FlatList, NativeSyntheticEvent, NativeScrollEvent} from "react-native";
 import moment from "moment";
 import {
-  returnDaysInYears,
-  returnAccordingDayHeaderText,
+  returnAccordingMonthHeaderText,
+  returnMonthsInYears,
 } from "helpers/CalendarCalculations";
-import {
-  DayCalendarChildContainer,
-  DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH,
-  DayHorizontalCalendarSeparator,
-  DayHorizontalCalendarArrayProps,
-} from "./DayCalendarChildComponents";
 import {connect} from "react-redux";
 import {actionCreators} from "store/reducers/JournalScreenReducer";
 import {State} from "types/states/State";
+import {
+  MonthHorizontalCalendarArrayProps,
+  MonthCalendarChildContainer,
+  MonthHorizontalCalendarSeparator,
+  MONTH_HORI_CALENDAR_CHILD_CONTAINER_WIDTH,
+} from "./MonthCalendarChildComponents";
 import {TabType} from "types/states/JournalScreenState";
 
 interface IMapStateToProps {
@@ -34,8 +34,11 @@ interface ComponentState {
   extraData: boolean;
 }
 
-class DayHorizontalCalendar extends React.PureComponent<Props, ComponentState> {
-  data: DayHorizontalCalendarArrayProps[] = [];
+class MonthHorizontalCalendar extends React.PureComponent<
+  Props,
+  ComponentState
+> {
+  data: MonthHorizontalCalendarArrayProps[] = [];
   initialScrollIndex: number = 0;
   yearsBetweenPast = 1;
   yearsBetweenFuture = 3;
@@ -47,22 +50,22 @@ class DayHorizontalCalendar extends React.PureComponent<Props, ComponentState> {
   };
 
   ref: React.RefObject<
-    FlatList<DayHorizontalCalendarArrayProps>
+    FlatList<MonthHorizontalCalendarArrayProps>
   > = React.createRef();
 
   componentDidMount() {
-    this.data = returnDaysInYears(
+    this.data = returnMonthsInYears(
       this.currentYear - this.yearsBetweenPast,
       this.currentYear + this.yearsBetweenFuture,
     );
-    this.updateInititalScrollIndex(getCurrentDateIndex(this.data));
+    this.updateInititalScrollIndex(getCurrentMonthIndex(this.data));
   }
 
   componentDidUpdate(prevProps: Props, prevState: ComponentState) {
     if (
       this.props.pressHeaderTitleTracker !==
         prevProps.pressHeaderTitleTracker &&
-      this.props.currentJournalTab === TabType.day
+      this.props.currentJournalTab === TabType.month
     ) {
       this.chooseDate(this.initialScrollIndex, () => {
         this.scrollToOffset(this.initialScrollIndex);
@@ -87,19 +90,20 @@ class DayHorizontalCalendar extends React.PureComponent<Props, ComponentState> {
     });
   };
 
-  keyExtractor = (item: DayHorizontalCalendarArrayProps, index: number) => {
-    return `journal-horizontal-day-calendar-iso-${item.dateString}-index-${index}`;
+  keyExtractor = (item: MonthHorizontalCalendarArrayProps, index: number) => {
+    return `journal-horizontal-month-calendar-iso-start-${item}-end-${item}-index-${index}`;
   };
 
   renderItem = ({
     item,
     index,
   }: {
-    item: DayHorizontalCalendarArrayProps;
+    item: MonthHorizontalCalendarArrayProps;
     index: number;
   }) => (
-    <DayCalendarChildContainer
-      dateString={item.dateString}
+    <MonthCalendarChildContainer
+      startMonthDateString={item.startMonthDateString}
+      endMonthDateString={item.endMonthDateString}
       title={item.title}
       description={item.description}
       index={index}
@@ -121,31 +125,31 @@ class DayHorizontalCalendar extends React.PureComponent<Props, ComponentState> {
   };
 
   getItemLayout = (
-    data: DayHorizontalCalendarArrayProps[] | null | undefined,
+    data: MonthHorizontalCalendarArrayProps[] | null | undefined,
     index: number,
   ) => ({
-    length: DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH,
-    offset: DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH * index,
+    length: MONTH_HORI_CALENDAR_CHILD_CONTAINER_WIDTH,
+    offset: MONTH_HORI_CALENDAR_CHILD_CONTAINER_WIDTH * index,
     index,
   });
 
   scrollToOffset = (index: number) => {
     if (this.ref && this.ref.current) {
       this.ref.current.scrollToOffset({
-        offset: (index - 1) * DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH, // For clearer view
+        offset: (index - 1) * MONTH_HORI_CALENDAR_CHILD_CONTAINER_WIDTH, // For clearer view
       });
     }
   };
 
   onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
     const {x} = e.nativeEvent.contentOffset;
-    let index = Math.floor(x / DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH);
+    let index = Math.floor(x / MONTH_HORI_CALENDAR_CHILD_CONTAINER_WIDTH);
     index += 1; // For clearer view
     if (index < 0) index = 0;
     if (this.data.length > 0) {
-      if (this.props.currentJournalTab === TabType.day) {
+      if (this.props.currentJournalTab === TabType.month) {
         this.props.updateCalendarHeaderTitle(
-          returnAccordingDayHeaderText(this.data, index),
+          returnAccordingMonthHeaderText(this.data, index),
         );
       }
     }
@@ -165,7 +169,7 @@ class DayHorizontalCalendar extends React.PureComponent<Props, ComponentState> {
         windowSize={9}
         maxToRenderPerBatch={9}
         initialNumToRender={9}
-        ItemSeparatorComponent={DayHorizontalCalendarSeparator}
+        ItemSeparatorComponent={MonthHorizontalCalendarSeparator}
         showsHorizontalScrollIndicator={false}
         removeClippedSubviews={true}
         scrollEventThrottle={12}
@@ -174,9 +178,12 @@ class DayHorizontalCalendar extends React.PureComponent<Props, ComponentState> {
   }
 }
 
-const getCurrentDateIndex = (days: DayHorizontalCalendarArrayProps[]) => {
-  return days.findIndex((day) => {
-    return day.dateString === moment().startOf("day").toISOString();
+const getCurrentMonthIndex = (months: MonthHorizontalCalendarArrayProps[]) => {
+  return months.findIndex((month) => {
+    return (
+      month.startMonthDateString ===
+      moment().startOf("month").startOf("day").toISOString()
+    );
   });
 };
 
@@ -198,4 +205,4 @@ const mapDispatchToProps: (d: Function) => IMapDispatchToProps = (
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(DayHorizontalCalendar);
+)(MonthHorizontalCalendar);

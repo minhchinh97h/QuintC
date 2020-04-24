@@ -6,11 +6,13 @@ import {HamburgerIcon, EllipsisIcon} from "icons";
 import HeaderTitle from "primitives/HeaderTitle";
 import {textIconColors, lightBackgroundColor} from "styles";
 import {DrawerActions, useNavigation} from "@react-navigation/native";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {getCalendarHeaderTitle} from "selectors/JournalScreenSelector";
+import {actionCreators} from "store/reducers/JournalScreenReducer";
 
 const JournalHeader = () => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const calendarHeaderTitle =
     useSelector(getCalendarHeaderTitle) || "JOURNAL_TAB_TITLE";
   const onPressDrawer = () => {
@@ -19,6 +21,10 @@ const JournalHeader = () => {
 
   const onPressOptions = () => {};
 
+  const onPressHeaderTitle = () => {
+    dispatch(actionCreators.updatePressHeaderTitleTracker());
+  };
+
   return (
     <SafeAreaView>
       <SpaceBetweenContainer style={styles.spaceBetweenContainer}>
@@ -26,7 +32,7 @@ const JournalHeader = () => {
           <HamburgerIcon size={20} color={textIconColors.ti_3} />
         </HeaderIcon>
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onPressHeaderTitle}>
           <HeaderTitle text={calendarHeaderTitle} />
         </TouchableOpacity>
 

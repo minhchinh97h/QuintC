@@ -1,6 +1,8 @@
 import moment from "moment";
 import {DayHorizontalCalendarArrayProps} from "../components/JournalScreenSpecific/DayCalendarChildComponents";
 import {translate} from "./Translate";
+import {WeekHorizontalCalendarArrayProps} from "components/JournalScreenSpecific/WeekCalendarChildComponents";
+import {MonthHorizontalCalendarArrayProps} from "components/JournalScreenSpecific/MonthCalendarChildComponents";
 
 const dayInWeekTexts = [
   "JOURNAL_HORIZONTAL_DAY_CALENDAR.S",
@@ -12,7 +14,8 @@ const dayInWeekTexts = [
   "JOURNAL_HORIZONTAL_DAY_CALENDAR.S",
 ];
 
-const monthFullNames = (index: number) => `MONTH_FULL_NAMES.${index}`;
+export const monthFullNames = (index: number) => `MONTH_FULL_NAMES.${index}`;
+export const monthShortNames = (index: number) => `MONTH_SHORT_NAMES.${index}`;
 
 export const returnDaysInYears = (
   leftEndYear: number,
@@ -59,4 +62,93 @@ export const returnAccordingDayHeaderText = (
   return `${translate(monthFullNames(dateMoment.month()))} ${moment(
     dateMoment.year(),
   )}`;
+};
+
+export const returnWeeksInYears = (
+  leftEndYear: number,
+  rightEndYear: number,
+) => {
+  let weeks: WeekHorizontalCalendarArrayProps[] = [];
+
+  for (let i = leftEndYear; i <= rightEndYear; i++) {
+    const numberOfWeeks = moment().year(i).weeksInYear();
+    for (let w = 1; w <= numberOfWeeks; w++) {
+      const startDayOfWeek = moment()
+        .year(i)
+        .isoWeek(w)
+        .startOf("isoWeek")
+        .startOf("day");
+      const endDayOfWeek = moment()
+        .year(i)
+        .isoWeek(w)
+        .endOf("isoWeek")
+        .startOf("day");
+
+      weeks.push({
+        startWeekDateString: startDayOfWeek.toISOString(),
+        endWeekDateString: endDayOfWeek.toISOString(),
+        title: `${translate("WEEK_TITLE_CALENDAR_CHILD")} ${w}`,
+        description: `${startDayOfWeek.date()} ${translate(
+          monthShortNames(startDayOfWeek.month()),
+        )} - ${endDayOfWeek.date()} ${translate(
+          monthShortNames(endDayOfWeek.month()),
+        )}`,
+      });
+    }
+  }
+
+  return weeks;
+};
+
+export const returnAccordingWeekHeaderText = (
+  weeks: WeekHorizontalCalendarArrayProps[],
+  index: number,
+) => {
+  const weekData = weeks[index];
+  const weekMoment = moment(weekData.startWeekDateString);
+  return `${translate(monthFullNames(weekMoment.month()))} ${moment(
+    weekMoment.year(),
+  )}`;
+};
+
+export const returnMonthsInYears = (
+  leftEndYear: number,
+  rightEndYear: number,
+) => {
+  let months: MonthHorizontalCalendarArrayProps[] = [];
+
+  for (let i = leftEndYear; i <= rightEndYear; i++) {
+    for (let m = 0; m < 12; m++) {
+      const startMonthDate = moment()
+        .year(i)
+        .month(m)
+        .startOf("month")
+        .startOf("day");
+      const endMonthDate = moment()
+        .year(i)
+        .month(m)
+        .endOf("month")
+        .startOf("day");
+
+      months.push({
+        startMonthDateString: startMonthDate.toISOString(),
+        endMonthDateString: endMonthDate.toISOString(),
+        title: `${translate(monthFullNames(m))}`,
+        description: `${translate(
+          "WEEK_TITLE_CALENDAR_CHILD",
+        )} ${startMonthDate.isoWeek()} - ${endMonthDate.isoWeek()}`,
+      });
+    }
+  }
+
+  return months;
+};
+
+export const returnAccordingMonthHeaderText = (
+  months: MonthHorizontalCalendarArrayProps[],
+  index: number,
+) => {
+  const monthData = months[index];
+  const monthMoment = moment(monthData.startMonthDateString);
+  return `${moment(monthMoment.year())}`;
 };

@@ -75,7 +75,7 @@ const ButtonContainer = (props: ButtonContainerProps) => {
         } else if (props.tabIndex === 2) {
             navigation.navigate("RewardScreen")
         } else {
-            navigation.navigate("SettingsScreenr")
+            navigation.navigate("SettingsScreen")
         }
     }
 
@@ -89,7 +89,7 @@ const ButtonContainer = (props: ButtonContainerProps) => {
 const style = StyleSheet.create({
     container: {
         flexDirection: "row",
-        height: 64,
+        height: 45,
         backgroundColor: lightBackgroundColor,
         shadowColor: colorBlack,
         shadowOpacity: 0.04,
@@ -110,6 +110,6 @@ const style = StyleSheet.create({
         justifyContent: "center"
     },
     spacer: {
-        height: 5
+        height: 2
     }
 })

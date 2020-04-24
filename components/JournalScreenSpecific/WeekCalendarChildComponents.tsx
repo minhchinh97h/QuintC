@@ -3,8 +3,9 @@ import {View, StyleSheet, TouchableOpacity} from "react-native";
 import TranslateText from "primitives/TranslateText";
 import {primaryColors, lightFont, textIconColors} from "styles";
 
-interface DayCalendarChildContainerProps {
-  dateString: string;
+interface WeekCalendarChildContainerProps {
+  startWeekDateString: string;
+  endWeekDateString: string;
   title: string;
   description: string;
   index: number;
@@ -13,14 +14,15 @@ interface DayCalendarChildContainerProps {
   lastActiveIndex: number;
 }
 
-export interface DayHorizontalCalendarArrayProps {
-  dateString: string;
+export interface WeekHorizontalCalendarArrayProps {
+  startWeekDateString: string;
+  endWeekDateString: string;
   title: string;
   description: string;
 }
 
-export class DayCalendarChildContainer extends React.PureComponent<
-  DayCalendarChildContainerProps
+export class WeekCalendarChildContainer extends React.PureComponent<
+  WeekCalendarChildContainerProps
 > {
   onPress = () => {
     this.props.chooseDate(this.props.index);
@@ -31,34 +33,43 @@ export class DayCalendarChildContainer extends React.PureComponent<
       <TouchableOpacity
         style={styles.calendarChildContainer}
         onPress={this.onPress}>
-        <DayCalendarChildTitle {...this.props} />
-        <DayCalendarChildDescription {...this.props} />
+        <WeekCalendarChildTitle {...this.props} />
+        <WeekCalendarChildDescription {...this.props} />
       </TouchableOpacity>
     );
   }
 }
 
-export class DayCalendarChildTitle extends React.PureComponent<
-  DayCalendarChildContainerProps
+export class WeekCalendarChildTitle extends React.PureComponent<
+  WeekCalendarChildContainerProps
 > {
   state = {
+    titleContainer: styles.titleContainer,
     title: styles.title,
   };
 
-  shouldComponentUpdate(nextProps: DayCalendarChildContainerProps) {
+  shouldComponentUpdate(nextProps: WeekCalendarChildContainerProps) {
     return (
       nextProps.activeIndex === this.props.index ||
       nextProps.lastActiveIndex === this.props.index
     );
   }
 
-  static getDerivedStateFromProps(nextProps: DayCalendarChildContainerProps) {
+  static getDerivedStateFromProps(nextProps: WeekCalendarChildContainerProps) {
     if (nextProps.activeIndex === nextProps.index) {
       return {
+        titleContainer: {
+          ...styles.titleContainer,
+          backgroundColor: primaryColors.prim_3,
+        },
         title: {...styles.title, color: primaryColors.prim_1},
       };
     } else if (nextProps.lastActiveIndex === nextProps.index) {
       return {
+        titleContainer: {
+          ...styles.titleContainer,
+          backgroundColor: "transparent",
+        },
         title: {...styles.title, color: textIconColors.ti_2},
       };
     }
@@ -66,43 +77,34 @@ export class DayCalendarChildTitle extends React.PureComponent<
 
   render() {
     return (
-      <View style={styles.titleContainer}>
+      <View style={this.state.titleContainer}>
         <TranslateText text={this.props.title} style={this.state.title} />
       </View>
     );
   }
 }
 
-export class DayCalendarChildDescription extends React.PureComponent<
-  DayCalendarChildContainerProps
+export class WeekCalendarChildDescription extends React.PureComponent<
+  WeekCalendarChildContainerProps
 > {
   state = {
-    descriptionContainer: styles.descriptionContainer,
     description: styles.description,
   };
 
-  shouldComponentUpdate(nextProps: DayCalendarChildContainerProps) {
+  shouldComponentUpdate(nextProps: WeekCalendarChildContainerProps) {
     return (
       nextProps.activeIndex === this.props.index ||
       nextProps.lastActiveIndex === this.props.index
     );
   }
 
-  static getDerivedStateFromProps(nextProps: DayCalendarChildContainerProps) {
+  static getDerivedStateFromProps(nextProps: WeekCalendarChildContainerProps) {
     if (nextProps.activeIndex === nextProps.index) {
       return {
-        descriptionContainer: {
-          ...styles.descriptionContainer,
-          backgroundColor: primaryColors.prim_3,
-        },
         description: {...styles.description, color: primaryColors.prim_1},
       };
     } else if (nextProps.lastActiveIndex === nextProps.index) {
       return {
-        descriptionContainer: {
-          ...styles.descriptionContainer,
-          backgroundColor: "transparent",
-        },
         description: {...styles.description, color: textIconColors.ti_3},
       };
     }
@@ -110,7 +112,7 @@ export class DayCalendarChildDescription extends React.PureComponent<
 
   render() {
     return (
-      <View style={this.state.descriptionContainer}>
+      <View style={styles.descriptionContainer}>
         <TranslateText
           text={this.props.description}
           style={this.state.description}
@@ -120,9 +122,9 @@ export class DayCalendarChildDescription extends React.PureComponent<
   }
 }
 
-export const DAY_HORI_CALENDAR_CHILD_CONTAINER_WIDTH = 45 + 14;
+export const WEEK_HORI_CALENDAR_CHILD_CONTAINER_WIDTH = 88 + 14;
 
-export const DayHorizontalCalendarSeparator = () => (
+export const WeekHorizontalCalendarSeparator = () => (
   <View style={styles.separator} />
 );
 
@@ -134,7 +136,7 @@ const styles = StyleSheet.create({
   calendarChildContainer: {
     alignItems: "center",
     justifyContent: "center",
-    width: 45,
+    width: 88,
   },
 
   titleContainer: {
@@ -142,6 +144,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     justifyContent: "center",
     alignItems: "center",
+    borderRadius: 22,
+    overflow: "hidden",
   },
 
   title: {
@@ -154,12 +158,10 @@ const styles = StyleSheet.create({
 
   descriptionContainer: {
     marginTop: 2,
-    width: 22,
     height: 22,
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 22,
-    overflow: "hidden",
   },
 
   description: {
