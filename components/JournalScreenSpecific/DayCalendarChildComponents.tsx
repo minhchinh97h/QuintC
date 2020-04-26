@@ -22,6 +22,13 @@ export interface DayHorizontalCalendarArrayProps {
 export class DayCalendarChildContainer extends React.PureComponent<
   DayCalendarChildContainerProps
 > {
+  shouldComponentUpdate(nextProps: DayCalendarChildContainerProps) {
+    return (
+      nextProps.activeIndex === this.props.index ||
+      nextProps.lastActiveIndex === this.props.index
+    );
+  }
+
   onPress = () => {
     this.props.chooseDate(this.props.index);
   };
@@ -41,33 +48,18 @@ export class DayCalendarChildContainer extends React.PureComponent<
 export class DayCalendarChildTitle extends React.PureComponent<
   DayCalendarChildContainerProps
 > {
-  state = {
-    title: styles.title,
+  returnTitleStyle = () => {
+    if (this.props.activeIndex === this.props.index) {
+      return {...styles.title, color: primaryColors.prim_1};
+    }
+    return styles.title;
   };
 
-  shouldComponentUpdate(nextProps: DayCalendarChildContainerProps) {
-    return (
-      nextProps.activeIndex === this.props.index ||
-      nextProps.lastActiveIndex === this.props.index
-    );
-  }
-
-  static getDerivedStateFromProps(nextProps: DayCalendarChildContainerProps) {
-    if (nextProps.activeIndex === nextProps.index) {
-      return {
-        title: {...styles.title, color: primaryColors.prim_1},
-      };
-    } else if (nextProps.lastActiveIndex === nextProps.index) {
-      return {
-        title: {...styles.title, color: textIconColors.ti_2},
-      };
-    }
-  }
-
   render() {
+    const titleStyle = this.returnTitleStyle();
     return (
       <View style={styles.titleContainer}>
-        <TranslateText text={this.props.title} style={this.state.title} />
+        <TranslateText text={this.props.title} style={titleStyle} />
       </View>
     );
   }
@@ -76,45 +68,33 @@ export class DayCalendarChildTitle extends React.PureComponent<
 export class DayCalendarChildDescription extends React.PureComponent<
   DayCalendarChildContainerProps
 > {
-  state = {
-    descriptionContainer: styles.descriptionContainer,
-    description: styles.description,
-  };
-
-  shouldComponentUpdate(nextProps: DayCalendarChildContainerProps) {
-    return (
-      nextProps.activeIndex === this.props.index ||
-      nextProps.lastActiveIndex === this.props.index
-    );
-  }
-
-  static getDerivedStateFromProps(nextProps: DayCalendarChildContainerProps) {
-    if (nextProps.activeIndex === nextProps.index) {
+  returnDescriptionContainerStyle = () => {
+    if (this.props.index === this.props.activeIndex) {
       return {
-        descriptionContainer: {
-          ...styles.descriptionContainer,
-          backgroundColor: primaryColors.prim_3,
-        },
-        description: {...styles.description, color: primaryColors.prim_1},
-      };
-    } else if (nextProps.lastActiveIndex === nextProps.index) {
-      return {
-        descriptionContainer: {
-          ...styles.descriptionContainer,
-          backgroundColor: "transparent",
-        },
-        description: {...styles.description, color: textIconColors.ti_3},
+        ...styles.descriptionContainer,
+        backgroundColor: primaryColors.prim_3,
       };
     }
-  }
+    return styles.descriptionContainer;
+  };
+
+  returnDescriptionStyle = () => {
+    if (this.props.index === this.props.activeIndex) {
+      return {
+        ...styles.description,
+        color: primaryColors.prim_1,
+      };
+    }
+    return styles.description;
+  };
 
   render() {
+    const descriptionContainerStyle = this.returnDescriptionContainerStyle();
+    const descriptionStyle = this.returnDescriptionStyle();
+
     return (
-      <View style={this.state.descriptionContainer}>
-        <TranslateText
-          text={this.props.description}
-          style={this.state.description}
-        />
+      <View style={descriptionContainerStyle}>
+        <TranslateText text={this.props.description} style={descriptionStyle} />
       </View>
     );
   }

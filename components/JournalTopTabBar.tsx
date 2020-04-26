@@ -7,6 +7,8 @@ import {MaterialTopTabBarProps} from "@react-navigation/material-top-tabs";
 import {useDispatch} from "react-redux";
 import {actionCreators} from "store/reducers/JournalScreenReducer";
 import {TabType} from "types/states/JournalScreenState";
+import NewTaskButton from "./JournalScreenSpecific/NewTaskButton";
+import NewTaskModal from "./JournalScreenSpecific/NewTaskModalSpecific/NewTaskModal";
 
 interface Props {
   materialTopTabBarProp: MaterialTopTabBarProps;
@@ -33,30 +35,35 @@ const JournalTopTabBar = (props: Props) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <ActiveTabIndicator activeIndex={activeIndex} />
-      <TaskTypeBar
-        index={0}
-        activeIndex={activeIndex}
-        lastActiveIndex={lastActiveIndex}
-        onPress={onChooseTaskTypeTab}
-        title={"DAY_TASK_TYPE_BAR"}
-      />
-      <TaskTypeBar
-        index={1}
-        activeIndex={activeIndex}
-        lastActiveIndex={lastActiveIndex}
-        onPress={onChooseTaskTypeTab}
-        title={"WEEK_TASK_TYPE_BAR"}
-      />
-      <TaskTypeBar
-        index={2}
-        activeIndex={activeIndex}
-        lastActiveIndex={lastActiveIndex}
-        onPress={onChooseTaskTypeTab}
-        title={"MONTH_TASK_TYPE_BAR"}
-      />
-    </View>
+    <>
+      <View style={styles.container}>
+        <ActiveTabIndicator activeIndex={activeIndex} />
+        <TaskTypeBar
+          index={0}
+          activeIndex={activeIndex}
+          lastActiveIndex={lastActiveIndex}
+          onPress={onChooseTaskTypeTab}
+          title={"DAY_TASK_TYPE_BAR"}
+        />
+        <TaskTypeBar
+          index={1}
+          activeIndex={activeIndex}
+          lastActiveIndex={lastActiveIndex}
+          onPress={onChooseTaskTypeTab}
+          title={"WEEK_TASK_TYPE_BAR"}
+        />
+        <TaskTypeBar
+          index={2}
+          activeIndex={activeIndex}
+          lastActiveIndex={lastActiveIndex}
+          onPress={onChooseTaskTypeTab}
+          title={"MONTH_TASK_TYPE_BAR"}
+        />
+      </View>
+
+      <NewTaskButton />
+      <NewTaskModal />
+    </>
   );
 };
 
